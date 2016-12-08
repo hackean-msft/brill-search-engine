@@ -6,30 +6,31 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"sync"
 )
 
 var index = -1
-var folders = 0
-var mu sync.Mutex
+
+// var folders = 0
+// var mu sync.Mutex
 
 // Repository for all documents that will be indexed
 type Repository struct {
-	name  string
+	Name  string
 	files []string
 }
 
 // NewRepository ( The Repo for all files and folders )
-func (r Repository) NewRepository(path string) {
+func NewRepository(path string) *Repository {
 	files, err := ioutil.ReadDir(path)
-	r.files = make([]string, len(files), len(files))
+	pathFiles := make([]string, 0, len(files))
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Could not read directory %s, Reason: %v\n", path, err)
 	}
 	for _, file := range files {
 		absoluteFileName := path + string(filepath.Separator) + file.Name()
-		r.files = append(r.files, absoluteFileName)
+		pathFiles = append(pathFiles, absoluteFileName)
 	}
+	return &Repository{Name: path, files: pathFiles}
 }
 
 // func listDirContents(path string) {

@@ -8,8 +8,23 @@ import (
 
 func main() {
 	repo := repository.NewRepository("C:\\Users\\hackeanwarley\\Go_Works\\src\\github.com\\teamelehyean\\brill\\home")
-	files := repo.GetFiles()
-	for _, file := range files {
-		fmt.Println(file)
+	var content string
+	_, err := repo.Next()
+	if err != nil {
+		// do nothing
 	}
+	content, err = repo.Get()
+	fmt.Println(content)
+
+	// file, err = repo.Next()
+	// if err != nil {
+	// 	// do nothing
+	// }
+	// fmt.Println(file)
+
+	// file, err = repo.Next()
+	// if err != nil {
+	// 	// do nothing
+	// }
+	// fmt.Println(file)
 }

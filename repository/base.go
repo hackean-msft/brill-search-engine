@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 var index = -1
@@ -60,12 +61,38 @@ func (r Repository) GetFiles() []string {
 	return r.files
 }
 
-// NextFile (Returns the next file)
-func (r Repository) NextFile() (string, error) {
+// Next Moves the pointer to the next file and returns the file name
+func (r Repository) Next() (string, error) {
 	index++
 	if index < len(r.files) {
 		return r.files[index], nil
 	}
-	return "", errors.New("No more file to be read")
+	return "", errors.New("End of file reached")
+}
 
+// Get Reads the Contents of the current file
+func (r Repository) Get() (string, error) {
+	suffixes := []string{"pdf", "docx", "ppt", "doc", "txt"}
+	for _, suffix := range suffixes {
+		fileName := r.files[index]
+		if strings.HasSuffix(fileName, suffix) {
+			result, err := getContents(fileName, suffix)
+			if err != nil {
+				return "", err
+			}
+			return result, nil
+		}
+	}
+	return "", errors.New("Invalid File Format")
+}
+
+func getContents(filePath string, suffix string) (string, error) {
+	if strings.Compare(suffix, "txt") == 0 {
+		result, err := ioutil.ReadFile(filePath)
+		if err != nil {
+			return "", err
+		}
+		return string(result), nil
+	}
+	return "", errors.New("Invalid File Format")
 }

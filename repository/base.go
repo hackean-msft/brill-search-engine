@@ -16,7 +16,7 @@ var index = -1
 
 // Repository for all documents that will be indexed
 type Repository struct {
-	Name  string
+	name  string
 	files []string
 }
 
@@ -31,7 +31,7 @@ func NewRepository(path string) *Repository {
 		absoluteFileName := path + string(filepath.Separator) + file.Name()
 		pathFiles = append(pathFiles, absoluteFileName)
 	}
-	return &Repository{Name: path, files: pathFiles}
+	return &Repository{name: path, files: pathFiles}
 }
 
 // func listDirContents(path string) {

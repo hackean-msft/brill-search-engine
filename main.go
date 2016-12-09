@@ -9,12 +9,15 @@ import (
 func main() {
 	repo := repository.NewRepository("C:\\Users\\hackeanwarley\\Go_Works\\src\\github.com\\teamelehyean\\brill\\home")
 	var content string
-	_, err := repo.Next()
-	if err != nil {
-		// do nothing
+	for repo.HasNext() {
+		fileName, err := repo.Next()
+		if err != nil {
+			// do nothing
+		}
+		content, err = repo.Get()
+		fmt.Println("\n" + fileName)
+		fmt.Println(content)
 	}
-	content, err = repo.Get()
-	fmt.Println(content)
 
 	// file, err = repo.Next()
 	// if err != nil {

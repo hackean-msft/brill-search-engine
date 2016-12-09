@@ -61,6 +61,12 @@ func (r Repository) GetFiles() []string {
 	return r.files
 }
 
+// HasNext checks if there is more file to be returned
+func (r Repository) HasNext() bool {
+	temp := index + 1
+	return temp < len(r.files)
+}
+
 // Next Moves the pointer to the next file and returns the file name
 func (r Repository) Next() (string, error) {
 	index++

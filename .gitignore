@@ -2,3 +2,4 @@ brill.exe
 home/
 .vscode
 debug
+tokenizer/stop_words.txt

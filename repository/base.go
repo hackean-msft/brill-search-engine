@@ -49,7 +49,7 @@ func NewRepository(path string) *Repository {
 // 			dirname := path + string(filepath.Separator) + file.Name()
 // 			go listDirContents(dirname)
 // 		} else {
-// 			mu.Lock()
+// 			mu.Lock() 
 // 			append(file)
 // 			mu.Unlock()
 // 		}

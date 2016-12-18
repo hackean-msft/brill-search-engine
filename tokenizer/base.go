@@ -6,6 +6,7 @@ import (
 )
 
 var stopWordsSet = make(map[string]bool)
+var unwantedSymbols = []string{",", ".", "}", "|", "{", "\r", "\n", "(", ")", ":", "_", "<", ">", "/", "\\"}
 
 // Tokenize splits a string into tokens
 func Tokenize(text string) []string {
@@ -40,6 +41,27 @@ func RemoveNonPrintableCharacters(text *string) {
 // ToLower converts a string to upper case
 func ToLower(text string) string {
 	return strings.ToLower(text)
+}
+
+// GetTokens retrieves the normalized token
+func GetTokens(content string) map[string]int {
+	tokens := Tokenize(content)
+	tokenCountMap := make(map[string]int)
+	for _, token := range tokens {
+		token = normalize(token)
+		if token != "" {
+			// make sure you don't include empty string among the tokens
+			tokenCountMap[token]++
+		}
+	}
+	return tokenCountMap
+}
+
+func normalize(token string) string {
+	token = RemoveUnwantedSymbols(token, unwantedSymbols)
+	token = ToLower(token)
+	token = strings.Trim(token, " ") // make sure there are no white spaces
+	return token
 }
 
 // Set set data structure similar to sets in maths

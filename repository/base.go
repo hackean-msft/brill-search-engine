@@ -49,7 +49,7 @@ func NewRepository(path string) *Repository {
 // 			dirname := path + string(filepath.Separator) + file.Name()
 // 			go listDirContents(dirname)
 // 		} else {
-// 			mu.Lock() 
+// 			mu.Lock()
 // 			append(file)
 // 			mu.Unlock()
 // 		}
@@ -99,6 +99,22 @@ func getContents(filePath string, suffix string) (string, error) {
 			return "", err
 		}
 		return string(result), nil
+	}
+	return "", errors.New("Invalid File Format")
+}
+
+//GetFileContents returns the content of the file
+func GetFileContents(filepath string) (string, error) {
+	suffixes := []string{"pdf", "docx", "ppt", "doc", "txt"}
+	for _, suffix := range suffixes {
+		fileName := filepath
+		if strings.HasSuffix(fileName, suffix) {
+			result, err := getContents(fileName, suffix)
+			if err != nil {
+				return "", err
+			}
+			return result, nil
+		}
 	}
 	return "", errors.New("Invalid File Format")
 }

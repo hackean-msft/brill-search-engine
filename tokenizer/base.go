@@ -44,17 +44,18 @@ func ToLower(text string) string {
 }
 
 // GetTokens retrieves the normalized token
-func GetTokens(content string) map[string]int {
+func GetTokens(content string) []string {
 	tokens := Tokenize(content)
-	tokenCountMap := make(map[string]int)
+	tokensLength := len(tokens)
+	normalizedTokens := make([]string, 0, tokensLength)
 	for _, token := range tokens {
 		token = normalize(token)
 		if token != "" {
 			// make sure you don't include empty string among the tokens
-			tokenCountMap[token]++
+			normalizedTokens = append(normalizedTokens, token)
 		}
 	}
-	return tokenCountMap
+	return normalizedTokens
 }
 
 func normalize(token string) string {

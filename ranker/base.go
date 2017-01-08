@@ -3,7 +3,6 @@
 package ranker
 
 import (
-	"fmt"
 	"math"
 	"sort"
 
@@ -68,7 +67,6 @@ func buildVector(tokens []string) []Result {
 		for _, entry := range entries {
 			list := entry.GetPostingsList()
 			i := 0
-			fmt.Println(i)
 			for e := list.Front(); e != nil; e = e.Next() {
 				posting := e.Value.(*invertedIndex.Posting)
 				docID := posting.GetDocID()

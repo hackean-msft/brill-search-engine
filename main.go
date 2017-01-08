@@ -9,14 +9,15 @@ import (
 
 	invertedindex "github.com/teamelehyean/brill/index"
 	"github.com/teamelehyean/brill/ranker"
-	repository "github.com/teamelehyean/brill/repository"
-	tokenizer "github.com/teamelehyean/brill/tokenizer"
+	"github.com/teamelehyean/brill/repository"
+	"github.com/teamelehyean/brill/tokenizer"
 )
 
 func main() {
 	invertedindex.DisplayInvertedIndex()
 	http.HandleFunc("/", serverRest)
 	http.HandleFunc("/notify", notify)
+	fmt.Println("Search engine started")
 	http.ListenAndServe("localhost:8800", nil)
 	// results := ranker.Rank("Lorem Ipsum discrete mathematics script")
 	// fmt.Println(results)
@@ -41,13 +42,15 @@ func getJSONResponse(query string) ([]byte, error) {
 	var documents []Payload
 	json.Unmarshal(body, &documents)
 
-	return json.MarshalIndent(documents, "", " ")
+	searchResult := SearchResult{Size: int64(len(results)), Documents: documents}
+
+	return json.MarshalIndent(searchResult, "", " ")
 }
 
 func serverRest(w http.ResponseWriter, r *http.Request) {
 	query := r.FormValue("q")
-	fmt.Printf("Query: %s", query)
 	response, _ := getJSONResponse(query)
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	fmt.Fprintf(w, string(response))
 }
 
@@ -76,4 +79,10 @@ type Payload struct {
 	FileName    string `json:"filename"`
 	CoverImage  string `json:"cover_img"`
 	Uploaded    int64  `json:"uploaded"`
+}
+
+//SearchResult denotes search engine response
+type SearchResult struct {
+	Size      int64     `json:"size"`
+	Documents []Payload `json:"documents"`
 }
